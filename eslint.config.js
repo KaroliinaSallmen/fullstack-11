@@ -44,6 +44,14 @@ module.exports = [
     },
   },
   {
+    files: ["playwright.config.js"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
     files: ["src/**/*.{js,jsx}", "test/**/*.{js,jsx}"],
     plugins: {
       react,
