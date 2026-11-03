@@ -16,7 +16,7 @@ app.get('/version', (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-  res.status(500).send('broken')
+  res.send('ok')
 })
 
 start()
