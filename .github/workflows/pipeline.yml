@@ -27,16 +27,29 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
-      - name: Discord success notification
-        if: ${{ success() && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
+
+  notify_success:
+    needs: [simple_deployment_pipeline]
+    if: ${{ success() && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Discord success notification      
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
           title: "Deployment successful!"
           description: "A new version deployed to production"
+
+
+  notify_failure:
+    needs: [simple_deployment_pipeline]
+    if: ${{ always() && needs.simple_deployment_pipeline.result == 'failure' }}
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Discord error notification
-        if: ${{ failure() }}
         uses: sarisia/actions-status-discord@v1
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
@@ -52,6 +65,7 @@ jobs:
             Author: ${{ github.actor }}
             Workflow: ${{ github.workflow }}
             Job: ${{ github.job }}
+    
       
   tag_release:
     needs: [simple_deployment_pipeline]
