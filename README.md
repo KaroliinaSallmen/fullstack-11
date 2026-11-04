@@ -15,3 +15,7 @@ Start by running `npm install` inside the project folder
 ### Link to deployed app
 
 https://fullstack-11-puj5.onrender.com
+
+### Link to the repository for exercise 21/22
+
+https://github.com/KaroliinaSallmen/fullstack-11-21
